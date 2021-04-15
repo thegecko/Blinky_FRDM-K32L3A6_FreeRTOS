@@ -40,7 +40,7 @@ jobs:
 
       - name: Clean repo files
         run: |
-          git ls-files | grep -v .github | xargs rm --no-run-if-empty
+          git ls-files | grep -v .github | xargs --no-run-if-empty rm
 
       - name: Extract zip
         run: |
