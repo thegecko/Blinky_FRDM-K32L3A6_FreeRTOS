@@ -1,50 +1,35 @@
-Paho MQTT Demo
+Blinky project
 ==============
 
-This demo application connects to **Eclipse Paho** through MQTT, subscribes to topics and publishes messages.
+The **Blinky** project can be easily used to verify the basic tool setup.
 
-The following describes the various components and the configuration settings.
+It is compliant to the [Cortex Microcontroller Software Interface Standard (CMSIS)](https://arm-software.github.io/CMSIS_5/General/html/index.html)
+and uses the [CMSIS-RTOS v2 API](https://arm-software.github.io/CMSIS_5/RTOS2/html/index.html) for RTOS functionality. The CMSIS-RTOS v2 API
+is supported by various real-time operating systems, for example [Keil RTX5](https://arm-software.github.io/CMSIS_5/RTOS2/html/rtx5_impl.html) or [FreeRTOS](https://github.com/ARM-software/CMSIS-FreeRTOS).
 
-Once the application is configured you can:
-- Build the application.
-- Connect the debugger.
-- Run the application and view messages in a debug printf or terminal window.
+Operation
+---------
 
-RTOS: FreeRTOS Real-Time Operating System
------------------------------------------
-The real-time operating system [FreeRTOS](https://github.com/ARM-software/CMSIS-FreeRTOS) implements the resource management.
+ - At start the `vioLED0` blinks in 1 sec interval.
+ - The `vioBUTTON0` changes the blink frequency and start/stops `vioLED1`.
+
+The board hardware mapping of `vioLED0`, `vioLED1`, and `vioBUTTON0` depends on the 
+configuration of the [CMSIS-Driver VIO](https://arm-software.github.io/CMSIS_5/Driver/html/group__vio__interface__gr.html).
+
+RTOS: Keil RTX5 Real-Time Operating System
+------------------------------------------
+
+The real-time operating system [Keil RTX5](https://arm-software.github.io/CMSIS_5/RTOS2/html/rtx5_impl.html) implements the resource management. 
 
 It is configured with the following settings:
 
-- Minimal stack size \[words]: 768
-- Total heap size \[bytes]: 24000
-- Preemption interrupt priority: 128
-- Event Recorder configuration
-  - Initialize Event Recorder: 1
+- [Global Dynamic Memory size](https://arm-software.github.io/CMSIS_5/RTOS2/html/config_rtx5.html#systemConfig): 24000 bytes
+- [Default Thread Stack size](https://arm-software.github.io/CMSIS_5/RTOS2/html/config_rtx5.html#threadConfig): 3072 bytes
+- [Event Recorder Configuration](https://arm-software.github.io/CMSIS_5/RTOS2/html/config_rtx5.html#evtrecConfig)
+  - [Global Initialization](https://arm-software.github.io/CMSIS_5/RTOS2/html/config_rtx5.html#evtrecConfigGlobIni): 1
+    - Start Recording: 1
 
-Refer to [Configure CMSIS-FreeRTOS](https://arm-software.github.io/CMSIS-FreeRTOS/General/html/cre_freertos_proj.html#cmsis_freertos_config) for a detailed description of all configuration options.
-
-Socket: WiFi IoT Socket
------------------------
-This implementation uses an [IoT socket](https://mdk-packs.github.io/IoT_Socket/html/index.html) layer that connects to a 
-[CMSIS-Driver WiFi](https://arm-software.github.io/CMSIS_5/Driver/html/index.html).
-
-The file `socket_startup.c` configures the WiFi connection with these settings:
- - SSID:          network identifier
- - PASSWORD:      network password
- - SECURITY_TYPE: network security
-
-Note: These settings need to be configured by the user!
-
-Module: ESP8266 WiFi shield
----------------------------
-
-The WiFi shield based on [ESP8266 SoC](https://www.espressif.com/en/products/socs/esp8266) is connected via an Arduino
-header using a USART interface. It exposes a
-[CMSIS-Driver WiFi](https://arm-software.github.io/CMSIS_5/Driver/html/group__wifi__interface__gr.html).
-
-This module was tested with the ESP8266 AT command set firmware revision **1.6.2**. Refer to 
-[Espressif Product Support Download](https://www.espressif.com/en/support/download/all) for more information.
+Refer to [Configure RTX v5](https://arm-software.github.io/CMSIS_5/RTOS2/html/config_rtx5.html) for a detailed description of all configuration options.
 
 Board: NXP FRDM-K32L3A6
 -----------------------
