@@ -16,35 +16,35 @@
  * limitations under the License.
  * -------------------------------------------------------------------------- */
 
-#include <stdint.h>
-#include <stdio.h>
-#include "cmsis_os2.h"
 #include "main.h"
 
-extern int32_t socket_startup (void);
-extern void MQTTEcho_Test (void);
+#include "cmsis_os2.h"
+#include "cmsis_vio.h"
 
-static const osThreadAttr_t app_main_attr = {
-  .stack_size = 8192U
-};
+#define BLINKING_DELAY 500U
+
+static const osThreadAttr_t app_main_attr = {.stack_size = 8192U};
 
 /*-----------------------------------------------------------------------------
  * Application main thread
  *----------------------------------------------------------------------------*/
-static void app_main (void *argument) {
-  int32_t status;
+static void app_main(void *argument) {
+  
+  volatile int8_t led;
+  led = 1;
 
-  printf("Paho IoT Demo\r\n");
-
-  status = socket_startup();
-  if (status == 0) {
-    MQTTEcho_Test();
+  for (;;) {
+    if (led == 1) {
+      vioSetSignal(vioLED0, vioLEDon);  // Switch LED0 on
+    } else {
+      vioSetSignal(vioLED0, vioLEDoff); // Switch LED0 off
+    }
+    osDelay(BLINKING_DELAY);
+    led *= -1;
   }
 }
 
 /*-----------------------------------------------------------------------------
  * Application initialization
  *----------------------------------------------------------------------------*/
-void app_initialize (void) {
-  osThreadNew(app_main, NULL, &app_main_attr);
-}
+void app_initialize(void) { osThreadNew(app_main, NULL, &app_main_attr); }
