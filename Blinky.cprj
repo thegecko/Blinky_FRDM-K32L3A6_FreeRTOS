@@ -3,21 +3,19 @@
   <created timestamp="2021-06-22T09:52:37" tool="cbuildgen 0.10.2"/>
 
   <info isLayer="false">
-    <description>Paho MQTT Demo</description>
-    <category>Arduino, Board, Cloud, Example, IoT, MQTT, Module, Paho, RTOS, Socket, WiFi</category>
-    <license>Apache 2.0, BSD 3-Clause, EPL 1.0</license>
+    <description>Blinky project</description>
+    <category>Blinky, Board, Example, RTOS</category>
+    <license>Apache 2.0, BSD 3-Clause</license>
   </info>
 
   <layers>
     <layer name="App">
-      <description>Demonstrates the subscribe-publish workflow of MQTT</description>
-      <category>Cloud, IoT, MQTT, Paho, Example</category>
-      <license>EPL 1.0</license>
+      <description>Simple example</description>
+      <category>Example, Blinky</category>
+      <license>Apache 2.0</license>
       <interfaces>
-        <consumes id="IoT_Socket"/>
+        <consumes id="C_VIO"/>
         <consumes id="RTOS2"/>
-        <consumes id="STDOUT"/>
-        <consumes id="Heap" value="65536"/>
       </interfaces>
     </layer>
     <layer hasTarget="1" name="Board">
@@ -37,17 +35,6 @@
         <provides id="Heap" value="65536"/>
       </interfaces>
     </layer>
-    <layer name="Module">
-      <description>Arduino module with ESP8266 WiFi chip</description>
-      <doc>https://www2.keil.com/iot/shields/wrl13287</doc>
-      <category>Module, Arduino, WiFi</category>
-      <license>Apache 2.0</license>
-      <interfaces>
-        <consumes id="A_UART" value="*"/>
-        <consumes id="RTOS2"/>
-        <provides id="C_WiFi" value="0"/>
-      </interfaces>
-    </layer>
     <layer name="RTOS">
       <description>FreeRTOS open-source real-time operating system with CMSIS-RTOS v2 API</description>
       <doc>https://arm-software.github.io/CMSIS-FreeRTOS/General/html/index.html</doc>
@@ -57,28 +44,14 @@
         <provides id="RTOS2"/>
       </interfaces>
     </layer>
-    <layer name="Socket">
-      <description>IoT Socket interface connecting to CMSIS-Driver WiFi</description>
-      <doc>https://mdk-packs.github.io/IoT_Socket/html/index.html</doc>
-      <category>Socket</category>
-      <license>Apache 2.0</license>
-      <interfaces>
-        <consumes id="C_WiFi" value="0"/>
-        <provides id="IoT_Socket"/>
-      </interfaces>
-    </layer>
   </layers>
 
   <packages>
-    <package name="mbedTLS" vendor="ARM" version="1.7.0:1.7.0"/>
-    <package name="Paho_MQTT" vendor="MDK-Packs" version="1.0.2:1.0.2"/>
     <package name="CMSIS" vendor="ARM" version="5.7.0:5.7.0"/>
     <package name="ARM_Compiler" vendor="Keil" version="1.6.3:1.6.3"/>
     <package name="FRDM-K32L3A6_BSP" vendor="NXP" version="13.0.0:13.0.0"/>
     <package name="K32L3A60_DFP" vendor="NXP" version="13.0.0:13.0.0"/>
-    <package name="CMSIS-Driver" vendor="ARM" version="2.6.1:2.6.1"/>
     <package name="CMSIS-FreeRTOS" vendor="ARM" version="10.3.1:10.3.1"/>
-    <package name="IoT_Socket" vendor="MDK-Packs" version="1.2.1:1.2.1"/>
   </packages>
 
   <compilers>
@@ -93,11 +66,6 @@
   </target>
 
   <components>
-    <component Cclass="IoT Client" Cgroup="MQTTClient-C" Cvendor="MDK-Packs" Cversion="1.1.0" layer="App"/>
-    <component Cclass="IoT Utility" Cgroup="MQTTPacket" Cvendor="MDK-Packs" Cversion="1.1.0" layer="App"/>
-    <component Cclass="Security" Cgroup="mbed TLS" Cvendor="ARM" Cversion="2.24.0" layer="App">
-      <file attr="config" category="header" name="configs/mbedTLS_config.h" version="2.24.0"/>
-    </component>
     <component Cclass="Board Support" Cgroup="SDK Project Template" Csub="project_template" Cvariant="frdmk32l3a6" Cvendor="NXP" Cversion="1.0.0" layer="Board">
       <file attr="config" category="sourceC" name="project_template/board.c" version="1.0.0"/>
       <file attr="config" category="header" name="project_template/board.h" version="1.0.0"/>
@@ -146,9 +114,6 @@
     <component Cbundle="ARM Compiler" Cclass="Compiler" Cgroup="I/O" Csub="STDERR" Cvariant="User" Cvendor="Keil" Cversion="1.2.0" layer="Board"/>
     <component Cbundle="ARM Compiler" Cclass="Compiler" Cgroup="I/O" Csub="STDIN" Cvariant="User" Cvendor="Keil" Cversion="1.2.0" layer="Board"/>
     <component Cbundle="ARM Compiler" Cclass="Compiler" Cgroup="I/O" Csub="STDOUT" Cvariant="User" Cvendor="Keil" Cversion="1.2.0" layer="Board"/>
-    <component Cclass="CMSIS Driver" Cgroup="WiFi" Csub="ESP8266" Cvariant="UART" Cvendor="Keil" Cversion="1.4.0" layer="Module">
-      <file attr="config" category="header" name="WiFi/ESP8266/Config/WiFi_ESP8266_Config.h" version="1.0.0"/>
-    </component>
     <component Cclass="CMSIS" Cgroup="RTOS2" Csub="FreeRTOS" Cvariant="Cortex-M" Cvendor="ARM" Cversion="10.3.1" layer="RTOS"/>
     <component Cbundle="FreeRTOS" Cclass="RTOS" Cgroup="Config" Cvariant="CMSIS RTOS2" Cvendor="ARM" Cversion="10.3.1" layer="RTOS">
       <file attr="config" category="header" name="CMSIS/RTOS2/FreeRTOS/Config/ARMCM/FreeRTOSConfig.h" version="10.2.0"/>
@@ -157,15 +122,11 @@
     <component Cbundle="FreeRTOS" Cclass="RTOS" Cgroup="Event Groups" Cvendor="ARM" Cversion="10.3.1" layer="RTOS"/>
     <component Cbundle="FreeRTOS" Cclass="RTOS" Cgroup="Heap" Cvariant="Heap_4" Cvendor="ARM" Cversion="10.3.1" layer="RTOS"/>
     <component Cbundle="FreeRTOS" Cclass="RTOS" Cgroup="Timers" Cvendor="ARM" Cversion="10.3.1" layer="RTOS"/>
-    <component Cclass="IoT Utility" Cgroup="Socket" Csub="WiFi" Cvendor="MDK-Packs" Cversion="1.0.0" layer="Socket"/>
   </components>
 
   <files>
     <group name="App">
       <file category="sourceC" layer="App" name="./app_main.c"/>
-      <file category="sourceC" layer="App" name="./MQTTEcho.c"/>
-      <file category="header" layer="App" name="./certificates.h"/>
-      <file category="sourceC" layer="Socket" name="./socket_startup.c"/>
     </group>
     <group name="Documentation">
       <file category="doc" layer="App" name="./README.md"/>
@@ -187,4 +148,3 @@
     </group>
   </files>
 </cprj>
-
